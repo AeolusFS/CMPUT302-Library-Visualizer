@@ -8,7 +8,7 @@ This might be good. This could be bad. All I know is that it'll be pretty rough,
   
 **Choose a directory and clone our repository:**
 
-	$ git clone _insert repo here_
+	$ git clone https://github.com/skaefer143/CMPUT302-Library-Visualizer
   
 **Install virtual environment and create a virtualenv instance:**
 	
