@@ -1,10 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 from bokeh.plotting import figure, output_file, show 
 from bokeh.embed import components
 
 def index(request):
+    return redirect('test')
+
+def test(request):
     x= [1,3,5,7,9,11,13]
     y= [1,2,3,4,5,6,7]
     title = 'y = f(x)'
@@ -20,7 +23,7 @@ def index(request):
     script, div = components(plot)
 
     #Feed them to the Django template.
-    return render(request, 'visualization_app/index.html', {
+    return render(request, 'visualization_app/test.html', {
         'script' : script , 
         'div' : div
     })
