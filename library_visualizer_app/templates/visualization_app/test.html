@@ -1,25 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'visualization_app/base.html' %}
+
+{% block app %}
+<div>
+
 <link href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.14.min.css" rel="stylesheet" type="text/css">
 <link href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.14.min.css" rel="stylesheet" type="text/css">
 
+<div class="mx-auto" style="display: block; width: 500px; margin-top: 30px; margin-bottom: 30px;">
+    <div style="text-align: center;">
+        Hey, this is the base page. I know what we should do! Try and insert a graph below this! Cool!
+    </div>
+    <div style="text-align: center;">
+            I can't center this stupid graph below me! Wtf!
+        </div>
 
-<div>
-    Hey, this is the base page. I know what we should do! Try and insert a graph below this! Cool!
+    <div style="margin: auto;">
+        {{ div | safe }}
+    </div>
+        {{ script | safe }}
+
+
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.14.min.js"></script>
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.14.min.js"></script>
+
+</div>
 </div>
 
-
-<head>
-    <title>Bokeh Scatter Plots</title>
-</head>
-<body>
-    {{ div | safe }}
-</body>
-    {{ script | safe }}
-
-</html>
-
-
-
-<script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.14.min.js"></script>
-<script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.14.min.js"></script>
+{% endblock %}
