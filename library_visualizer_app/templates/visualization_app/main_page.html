@@ -2,19 +2,37 @@
 
 {% block app %}
 <div> 
-    <div class="card">
+    <div class="card" style="padding-bottom:50px;">
         <h3 class="card-header">LibHub</h3>
         <div class="card-body">
-        Our application will be here.
-
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    {% for library in libraries %}
+                    <li class="list-group-item"><a href="{% url 'test' %}">{{library.name}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
         <br>
 
         <a href="{% url 'test' %}">Hey lets go to the test visualization page</a>
 
         </div>
+        <div class="card-footer">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Testing</a>
+                    </li>
+                </ul>
+        </div>
     </div>
 </div>
 
-
+<style>
+    .card-footer{
+        position:absolute;
+        bottom:0;
+        width:100%;
+    }
+</style>
 
 {% endblock %}

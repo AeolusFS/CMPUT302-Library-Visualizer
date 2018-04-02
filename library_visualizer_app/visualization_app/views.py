@@ -4,8 +4,18 @@ from django.http import HttpResponse
 from bokeh.plotting import figure, output_file, show 
 from bokeh.embed import components
 
+from visualization_app.classes import Library
+
 def index(request):
-    return render(request, 'visualization_app/main_page.html',{})
+    # pass in each library as an array to the template
+    # library data can be made in another py file and imported here
+    test_library1 = Library("junit4", "junit-team/junit4", "testing")
+    test_library2 = Library("testng", "cbeust/testng", "testing")
+    libraries = [test_library1, test_library2]
+
+    return render(request, 'visualization_app/main_page.html', {
+        "libraries" : libraries,
+    })
 
 def test(request):
     x= [1,3,5,7,9,11,13]
