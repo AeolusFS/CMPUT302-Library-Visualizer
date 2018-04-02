@@ -16,13 +16,27 @@
     <a class="w3-button w3-bar-item">Library Visualizer Application - Hi-Fidelity Prototype</a>
 </nav>
 
+<div class="center">
 {% block app %}
 {% endblock %}
+</div>
 
 <!-- Footer -->
-<footer class="w3-container w3-padding-16 w3-small" style="text-align:center;">
+<footer class="w3-container w3-padding-16 w3-small" style="text-align:center; width:100%; position:absolute; bottom:0;">
     <a>Made by: Wobbegongs - CMPUT 302 - Winter 2018</a>
 </footer>
 
 </body>
+
+<!-- CSS stuff -->
+<style>
+    .center {
+        border: 2px solid black;
+        padding: 10px;
+        margin: 50px auto;
+        width: 50%;
+    }
+</style>
+
+
 </html>

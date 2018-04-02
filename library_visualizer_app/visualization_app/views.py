@@ -5,7 +5,7 @@ from bokeh.plotting import figure, output_file, show
 from bokeh.embed import components
 
 def index(request):
-    return redirect('test')
+    return render(request, 'visualization_app/main_page.html',{})
 
 def test(request):
     x= [1,3,5,7,9,11,13]
