@@ -9,12 +9,15 @@ from visualization_app.classes import Library
 def index(request):
     # pass in each library as an array to the template
     # library data can be made in another py file and imported here
-    test_library1 = Library("junit4", "junit-team/junit4", "testing")
-    test_library2 = Library("testng", "cbeust/testng", "testing")
-    libraries = [test_library1, test_library2]
+    test_library1 = Library("junit4", "junit-team/junit4", "Testing")
+    test_library2 = Library("testng", "cbeust/testng", "Testing")
+    test_library3 = Library("mockito", "mockito/mockito", "Mocking")
+    testing_libraries = [test_library1, test_library2]
+    mock_libraries = [test_library3]
+    all_libraries = [testing_libraries, mock_libraries]
 
     return render(request, 'visualization_app/main_page.html', {
-        "libraries" : libraries,
+        "all_libraries" : all_libraries,
     })
 
 def visualization(request):

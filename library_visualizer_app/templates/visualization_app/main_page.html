@@ -2,20 +2,23 @@
 
 {% block app %}
 <div> 
-    <div class="card" style="padding-bottom:50px;">
+    <div class="card" style="padding-bottom:50px; height:500px;">
         <h3 class="card-header">LibHub</h3>
-        <form action="{% url 'visualization' %}" method="post" style="margin-bottom:20px;">
+        {% for domain_libraries in all_libraries %}
+        {% if forloop.first %}
+        <form action="{% url 'visualization' %}" method="post" style="margin-bottom:20px;", id="{{domain_libraries.0.domain}}">
         {% csrf_token %}
         <div class="card-body">
             <div class="card">
                 <ul class="list-group list-group-flush">
-                    {% for library in libraries %}
+                    {% for library in domain_libraries %}
                     <li class="list-group-item">
                         <div class="custom-control custom-checkbox">
                             <input class="custom-control-input" type="checkbox" name="{{library.name}}" value="checked" id="{{library.name}}">
                             <label class="custom-control-label" for="{{library.name}}">{{library.name}}</label>
                         </div>
                         <a href="http://github.com/{{library.url}}">{{library.url}}</a>
+                        <h4 style="float: right; margin: -10px 0;">Domain - {{library.domain}}</h4>
                     </li>
                     {% endfor %}
                 </ul>
@@ -23,20 +26,46 @@
         <br>
 
         <input style="float:right;" type="submit" value="Compare these libraries">
-        </form>
         </div>
-        <div class="card-footer">
-                <ul class="nav nav-tabs card-header-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Testing</a>
+        </form>
+        {% else %}
+        <form action="{% url 'visualization' %}" method="post" style="margin-bottom:20px; display:none;", id="{{domain_libraries.0.domain}}">
+        {% csrf_token %}
+        <div class="card-body">
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    {% for library in domain_libraries %}
+                    <li class="list-group-item">
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" name="{{library.name}}" value="checked" id="{{library.name}}">
+                            <label class="custom-control-label" for="{{library.name}}">{{library.name}}</label>
+                        </div>
+                        <a href="http://github.com/{{library.url}}">{{library.url}}</a>
+                        <h4 style="float: right; margin: -10px 0;">Domain - {{library.domain}}</h4>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Mocking</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Another Domain</a>
-                    </li>
+                    {% endfor %}
                 </ul>
+            </div>
+        <br>
+        <input style="float:right;" type="submit" value="Compare these libraries">
+        </div>
+        </form>
+        {% endif %}
+        {% endfor %}
+        <div class="card-footer">
+            <ul class="nav nav-tabs card-header-tabs">
+                {% for domain_libraries in all_libraries %}
+                {% if forloop.first %}
+                <li class="nav-item">
+                    <a class="nav-link active" id="nav{{domain_libraries.0.domain}}" href="#" onclick="changeNav('{{domain_libraries.0.domain}}')">{{domain_libraries.0.domain}}</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" id="nav{{domain_libraries.0.domain}}" href="#" onclick="changeNav('{{domain_libraries.0.domain}}')">{{domain_libraries.0.domain}}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
         </div>
     </div>
 </div>
@@ -48,5 +77,21 @@
         width:100%;
     }
 </style>
+
+<script>
+function changeNav(id) {
+    document.getElementById(id).style.display = "Block";
+    document.getElementById("nav"+id).classList.add("active");
+    
+    {% for domain_libraries in all_libraries %}
+    if ("{{domain_libraries.0.domain}}" != id){
+        /* this will work don't worry */
+        document.getElementById("{{domain_libraries.0.domain}}").style.display = "None";
+        document.getElementById("nav"+"{{domain_libraries.0.domain}}").classList.remove("active");
+    }
+    {% endfor %}
+}
+
+</script>
 
 {% endblock %}
