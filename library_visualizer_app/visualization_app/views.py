@@ -5,14 +5,15 @@ from bokeh.plotting import figure, output_file, show
 from bokeh.embed import components
 
 from visualization_app.classes import Library
+from visualization_app.library_data import lib_info, lib_name
 
 def index(request):
     # pass in each library as an array to the template
     # library data can be made in another py file and imported here
-    test_library1 = Library("junit4", "junit-team/junit4", "Testing")
+    test_library1 = Library("testinglibrary", "skaefer143", "Testing")
     test_library2 = Library("testng", "cbeust/testng", "Testing")
     test_library3 = Library("mockito", "mockito/mockito", "Mocking")
-    testing_libraries = [test_library1, test_library2]
+    testing_libraries = [test_library1, test_library2, lib_info['junit4']]
     mock_libraries = [test_library3]
     all_libraries = [testing_libraries, mock_libraries]
 

@@ -6,7 +6,7 @@
         <h3 class="card-header">LibHub</h3>
         {% for domain_libraries in all_libraries %}
         {% if forloop.first %}
-        <form action="{% url 'visualization' %}" method="post" style="margin-bottom:20px;", id="{{domain_libraries.0.domain}}">
+        <form action="{% url 'visualization' %}" method="post" style="margin-bottom:20px;", id="{{domain_libraries.0.Domain}}">
         {% csrf_token %}
         <div class="card-body">
             <div class="card">
@@ -14,11 +14,11 @@
                     {% for library in domain_libraries %}
                     <li class="list-group-item">
                         <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox" name="{{library.name}}" value="checked" id="{{library.name}}">
-                            <label class="custom-control-label" for="{{library.name}}">{{library.name}}</label>
+                            <input class="custom-control-input" type="checkbox" name="{{library.Name}}" value="checked" id="{{library.Name}}">
+                            <label class="custom-control-label" for="{{library.Name}}">{{library.Name}}</label>
                         </div>
-                        <a href="http://github.com/{{library.url}}">{{library.url}}</a>
-                        <h4 style="float: right; margin: -10px 0;">Domain - {{library.domain}}</h4>
+                        <a href="http://github.com/{{library.Git_Rep}}">{{library.Git_Rep}}</a>
+                        <h4 style="float: right; margin: -10px 0;">Domain - {{library.Domain}}</h4>
                     </li>
                     {% endfor %}
                 </ul>
@@ -29,7 +29,7 @@
         </div>
         </form>
         {% else %}
-        <form action="{% url 'visualization' %}" method="post" style="margin-bottom:20px; display:none;", id="{{domain_libraries.0.domain}}">
+        <form action="{% url 'visualization' %}" method="post" style="margin-bottom:20px; display:none;", id="{{domain_libraries.0.Domain}}">
         {% csrf_token %}
         <div class="card-body">
             <div class="card">
@@ -37,11 +37,11 @@
                     {% for library in domain_libraries %}
                     <li class="list-group-item">
                         <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox" name="{{library.name}}" value="checked" id="{{library.name}}">
-                            <label class="custom-control-label" for="{{library.name}}">{{library.name}}</label>
+                            <input class="custom-control-input" type="checkbox" name="{{library.Name}}" value="checked" id="{{library.Name}}">
+                            <label class="custom-control-label" for="{{library.Name}}">{{library.Name}}</label>
                         </div>
-                        <a href="http://github.com/{{library.url}}">{{library.url}}</a>
-                        <h4 style="float: right; margin: -10px 0;">Domain - {{library.domain}}</h4>
+                        <a href="http://github.com/{{library.Git_Rep}}">{{library.Git_Rep}}</a>
+                        <h4 style="float: right; margin: -10px 0;">Domain - {{library.Domain}}</h4>
                     </li>
                     {% endfor %}
                 </ul>
@@ -57,11 +57,11 @@
                 {% for domain_libraries in all_libraries %}
                 {% if forloop.first %}
                 <li class="nav-item">
-                    <a class="nav-link active" id="nav{{domain_libraries.0.domain}}" href="#" onclick="changeNav('{{domain_libraries.0.domain}}')">{{domain_libraries.0.domain}}</a>
+                    <a class="nav-link active" id="nav{{domain_libraries.0.Domain}}" href="#" onclick="changeNav('{{domain_libraries.0.Domain}}')">{{domain_libraries.0.Domain}}</a>
                 </li>
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" id="nav{{domain_libraries.0.domain}}" href="#" onclick="changeNav('{{domain_libraries.0.domain}}')">{{domain_libraries.0.domain}}</a>
+                    <a class="nav-link" id="nav{{domain_libraries.0.Domain}}" href="#" onclick="changeNav('{{domain_libraries.0.Domain}}')">{{domain_libraries.0.Domain}}</a>
                 </li>
                 {% endif %}
                 {% endfor %}
@@ -84,10 +84,10 @@ function changeNav(id) {
     document.getElementById("nav"+id).classList.add("active");
     
     {% for domain_libraries in all_libraries %}
-    if ("{{domain_libraries.0.domain}}" != id){
+    if ("{{domain_libraries.0.Domain}}" != id){
         /* this will work don't worry */
-        document.getElementById("{{domain_libraries.0.domain}}").style.display = "None";
-        document.getElementById("nav"+"{{domain_libraries.0.domain}}").classList.remove("active");
+        document.getElementById("{{domain_libraries.0.Domain}}").style.display = "None";
+        document.getElementById("nav"+"{{domain_libraries.0.Domain}}").classList.remove("active");
     }
     {% endfor %}
 }

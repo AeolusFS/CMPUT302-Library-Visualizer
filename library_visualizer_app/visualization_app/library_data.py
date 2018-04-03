@@ -29,8 +29,9 @@ lib_name = ['junit4', 'testng', 'slf4j', 'log4j2', 'logback', 'commons logging',
 
 lib_info = {
     'junit4':{
+        'Name': 'junit4',
         'Git_Rep':'junit-team/junit4',
-        'Domain':'testing',
+        'Domain':'Testing',
         'Popularity_Count':56201,
         'Last_Modification_Date':'2018-02-15',
         'Last_Discussed_SO':'2018-02-20',
