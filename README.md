@@ -18,13 +18,20 @@ This might be good. This could be bad. All I know is that it'll be pretty rough,
 
 **Activate virtual environment and install requirements:**
 
+	On Linux:
 	$ source myvenv/bin/activate
-	($ source myvenv/Scripts/activate on Windows)
+	On Windows:
+	$ cd myvenv/Scripts/ 
+	$ activate
+
+	Make sure your command line has a (myvenv) prefixed to your input line
+	Then:
+	Navigate back to main folder, and type
 	$ pip3 install -r requirements.txt
 	
-**Migrate the database to get model schema:**
+**Migrate the database to get model schema: (not required, do it anyways)**
 
-	$ cd teaching_assignment/
+	$ cd library_visualizer_app/
 	$ python manage.py migrate
 
 **In virtual environment, start the project:**
@@ -34,7 +41,7 @@ This might be good. This could be bad. All I know is that it'll be pretty rough,
   
 **In web browser, go to:**
   
-	$ localhost:8000/login 
+	$ http://127.0.0.1:8000/
   
 **To deactivate virtual environment:**
 
