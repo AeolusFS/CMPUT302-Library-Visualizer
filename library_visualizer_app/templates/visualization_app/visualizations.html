@@ -7,30 +7,72 @@
 <link href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.14.min.css" rel="stylesheet" type="text/css">
 <link href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.14.min.css" rel="stylesheet" type="text/css">
 
-<div class="card-header">
-    <h3 style="margin: 0;"><a href="{% url 'index' %}" style="display:inline-block;">
-    <img src="{% static 'open-iconic/svg/arrow-thick-left.svg' %}" alt='back arrow' style="height: 36px; margin: auto;"></a>
-    LibHub</h3>
-</div>
-
-<div class="mx-auto card-body" style="display: block; width: 500px; margin-top: 30px; margin-bottom: 30px;">
-    <div style="text-align: center;">
-        This is the base visualization page for comparisons.
-    </div>
-    <div style="text-align: center;">
-        I can't center this stupid graph below me! Wtf!
+    <div class="card-header">
+        <h3 style="margin: 0;"><a href="{% url 'index' %}" style="display:inline-block;">
+        <img src="{% static 'open-iconic/svg/arrow-thick-left.svg' %}" alt='back arrow' style="height: 36px; margin: auto;"></a>
+        LibHub</h3>
     </div>
 
-    <div style="margin: auto;">
-        {{ div | safe }}
+    {% for visualization in visualization_names %}
+    {% if forloop.first %}
+    <div id="{{visualization}}" class="mx-auto card-body" style="display: Block; width: 500px;">
+    {% else %}
+    <div id="{{visualization}}" class="mx-auto card-body" style="display: None; width: 500px;">
+    {% endif %}
+        <div style="text-align: center;">
+            This is the visualization page for {{visualization}}.
+        </div>
+        <div style="text-align: center;">
+            I can't center this stupid graph below me! Wtf!
+        </div>
+
+        <div style="margin: auto;">
+            {{ div | safe }}
+        </div>
+            {{ script | safe }}
+
+
+        <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.14.min.js"></script>
+        <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.14.min.js"></script>
+
     </div>
-        {{ script | safe }}
+    {% endfor %}
 
-
-    <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.14.min.js"></script>
-    <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.14.min.js"></script>
-
+    <div class="card-footer">
+        <ul class="nav nav-tabs card-header-tabs">
+            {% for visualization in visualization_names %}
+            <li class="nav-item small">
+                {% if forloop.first %}
+                <a class="nav-link active" id="nav{{visualization}}" href="#" onclick="changeNav('{{visualization}}')">{{visualization}}</a>
+                {% else %}
+                <a class="nav-link" id="nav{{visualization}}" href="#" onclick="changeNav('{{visualization}}')">{{visualization}}</a>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
-</div>
+
+
+<script>
+    function changeNav(id) {
+        document.getElementById(id).style.display = "Block";
+        document.getElementById("nav"+id).classList.add("active");
+        let visualization_names = ["Popularity Count", "Release Frequency", "Last Modified Date",
+        "Backwards Compatibility", "Stack Overflow", "Security & Performance", "Issue Data Response Time", "Issue Data Resolved Time"];
+        for (let index = 0; index < visualization_names.length; index++) {
+            if (visualization_names[index] != id){
+                try {
+                    document.getElementById(visualization_names[index]).style.display = "None";
+                    document.getElementById("nav"+visualization_names[index]).classList.remove("active");
+                }
+                catch(err){
+                    console.log(visualization_names[index] + " is not in navbar footer")
+                }
+            }      
+        }
+    }
+    
+    </script>
 
 {% endblock %}

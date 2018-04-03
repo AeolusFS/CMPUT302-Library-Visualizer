@@ -2,35 +2,16 @@
 
 {% block app %}
 <div> 
-    <div class="card" style="padding-bottom:50px; height:500px;">
+    <div class="card" style="padding-bottom:50px; height:550px;">
         <h3 class="card-header">LibHub</h3>
         {% for domain_libraries in all_libraries %}
         {% if forloop.first %}
         <form action="{% url 'visualization' %}" method="post" style="margin-bottom:20px;", id="{{domain_libraries.0.Domain}}">
-        {% csrf_token %}
-        <div class="card-body">
-            <div class="card">
-                <ul class="list-group list-group-flush">
-                    {% for library in domain_libraries %}
-                    <li class="list-group-item">
-                        <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox" name="{{library.Name}}" value="checked" id="{{library.Name}}">
-                            <label class="custom-control-label" for="{{library.Name}}">{{library.Name}}</label>
-                        </div>
-                        <a href="http://github.com/{{library.Git_Rep}}">{{library.Git_Rep}}</a>
-                        <h4 style="float: right; margin: -10px 0;">Domain - {{library.Domain}}</h4>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        <br>
-
-        <input style="float:right;" type="submit" value="Compare these libraries">
-        </div>
-        </form>
         {% else %}
         <form action="{% url 'visualization' %}" method="post" style="margin-bottom:20px; display:none;", id="{{domain_libraries.0.Domain}}">
+        {% endif %}
         {% csrf_token %}
+
         <div class="card-body">
             <div class="card">
                 <ul class="list-group list-group-flush">
@@ -50,20 +31,17 @@
         <input style="float:right;" type="submit" value="Compare these libraries">
         </div>
         </form>
-        {% endif %}
         {% endfor %}
         <div class="card-footer">
             <ul class="nav nav-tabs card-header-tabs">
                 {% for domain_libraries in all_libraries %}
-                {% if forloop.first %}
                 <li class="nav-item">
+                    {% if forloop.first %}
                     <a class="nav-link active" id="nav{{domain_libraries.0.Domain}}" href="#" onclick="changeNav('{{domain_libraries.0.Domain}}')">{{domain_libraries.0.Domain}}</a>
-                </li>
-                {% else %}
-                <li class="nav-item">
+                    {% else %}
                     <a class="nav-link" id="nav{{domain_libraries.0.Domain}}" href="#" onclick="changeNav('{{domain_libraries.0.Domain}}')">{{domain_libraries.0.Domain}}</a>
+                    {% endif %}
                 </li>
-                {% endif %}
                 {% endfor %}
             </ul>
         </div>
@@ -82,14 +60,18 @@
 function changeNav(id) {
     document.getElementById(id).style.display = "Block";
     document.getElementById("nav"+id).classList.add("active");
-    
-    {% for domain_libraries in all_libraries %}
-    if ("{{domain_libraries.0.Domain}}" != id){
-        /* this will work don't worry */
-        document.getElementById("{{domain_libraries.0.Domain}}").style.display = "None";
-        document.getElementById("nav"+"{{domain_libraries.0.Domain}}").classList.remove("active");
+    let domains = ["Testing", "Logging", "Mocking"]
+    for (let index = 0; index < domains.length; index++) {
+        if (domains[index] != id){
+            try{
+                document.getElementById(domains[index]).style.display = "None";
+                document.getElementById("nav"+domains[index]).classList.remove("active");
+            }
+            catch(err){
+                console.log(domains[index] + " is not in navbar footer")
+            }
+        }
     }
-    {% endfor %}
 }
 
 </script>
