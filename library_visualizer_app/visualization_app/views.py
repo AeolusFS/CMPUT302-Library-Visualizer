@@ -33,7 +33,7 @@ def test(request):
     script, div = components(plot)
 
     #Feed them to the Django template.
-    return render(request, 'visualization_app/test.html', {
+    return render(request, 'visualization_app/visualizations.html', {
         'script' : script , 
         'div' : div
     })
