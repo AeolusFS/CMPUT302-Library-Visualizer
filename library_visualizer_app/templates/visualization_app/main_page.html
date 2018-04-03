@@ -4,12 +4,17 @@
 <div> 
     <div class="card" style="padding-bottom:50px;">
         <h3 class="card-header">LibHub</h3>
+        <form action="{% url 'visualization' %}" method="post" style="margin-bottom:20px;">
+        {% csrf_token %}
         <div class="card-body">
             <div class="card">
                 <ul class="list-group list-group-flush">
                     {% for library in libraries %}
                     <li class="list-group-item">
-                        <h4>{{library.name}}</h4>
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" name="{{library.name}}" value="checked" id="{{library.name}}">
+                            <label class="custom-control-label" for="{{library.name}}">{{library.name}}</label>
+                        </div>
                         <a href="http://github.com/{{library.url}}">{{library.url}}</a>
                     </li>
                     {% endfor %}
@@ -17,8 +22,8 @@
             </div>
         <br>
 
-        <a href="{% url 'test' %}">Hey lets go to the test visualization page</a>
-
+        <input style="float:right;" type="submit" value="Compare these libraries">
+        </form>
         </div>
         <div class="card-footer">
                 <ul class="nav nav-tabs card-header-tabs">

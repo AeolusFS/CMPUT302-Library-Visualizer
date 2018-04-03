@@ -6,5 +6,5 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('test', views.test, name='test'),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path('visualization/', views.visualization, name='visualization'),
+]

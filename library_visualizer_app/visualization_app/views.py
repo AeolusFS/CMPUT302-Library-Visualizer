@@ -17,7 +17,11 @@ def index(request):
         "libraries" : libraries,
     })
 
-def test(request):
+def visualization(request):
+    if request.method == 'POST':
+        print(request.POST) # The library names should appear in the request dictionary
+        # Check with libraries are here, then display them. If empty, well dang, the person submitted an empty form. Display nothing
+
     x= [1,3,5,7,9,11,13]
     y= [1,2,3,4,5,6,7]
     title = 'y = f(x)'
