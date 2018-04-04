@@ -9,7 +9,11 @@ This might be good. This could be bad. All I know is that it'll be pretty rough,
 **Choose a directory and clone our repository:**
 
 	$ git clone https://github.com/skaefer143/CMPUT302-Library-Visualizer
-  
+
+**Install xlrd to read xlsx file**
+
+	$ pip3 install xlrd --upgrade
+
 **Install virtual environment and create a virtualenv instance:**
 	
 	$ pip3 install virtualenv	
