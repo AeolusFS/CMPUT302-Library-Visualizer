@@ -1,3 +1,5 @@
+import os
+
 # This library will import all the data from xlsx file and store
 # in python dictionary with the format below
 
@@ -37,7 +39,9 @@ def remove_values_from_list(the_list, value):
 
 # Read xlsx and initialize datemode
 #INSERT YOUR OWN PATH TO THE Metric_Data.xlsx HERE
-data = xlrd.open_workbook(r"C:\Users\Zakia\Desktop\302Project\library_visualizer_app\visualization_app\Metric_Data.xlsx")
+dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'Metric_Data.xlsx')
+print(dir_path)
+data = xlrd.open_workbook(dir_path)
 lib_info = {}
 
 data_datemode = data.datemode
@@ -161,4 +165,4 @@ nrows = table.nrows
 for i in range(0,nrows):
     STATUS = 'NOT FOUND'
 
-print (lib_info)
+# print (lib_info)
