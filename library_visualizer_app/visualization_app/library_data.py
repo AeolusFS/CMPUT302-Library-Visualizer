@@ -36,6 +36,7 @@ def remove_values_from_list(the_list, value):
         the_list.remove(value)
 
 # Read xlsx and initialize datemode
+#INSERT YOUR OWN PATH TO THE Metric_Data.xlsx HERE
 data = xlrd.open_workbook(r"C:\Users\Zakia\Desktop\302Project\library_visualizer_app\visualization_app\Metric_Data.xlsx")
 lib_info = {}
 
