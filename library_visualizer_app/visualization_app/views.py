@@ -49,8 +49,8 @@ def visualization(request):
         
 
         # Popularity Count Graph
-        plot = figure(x_range=library_names, title="Popularity Counts")
-        plot.vbar(x=library_names, top=library_popularity, width=0.9)
+        plot = figure(x_range=library_names, plot_height=400, title="Popularity Counts")
+        plot.vbar(x=library_names, top=library_popularity, width=0.6)
 
         plot.xgrid.grid_line_color = None
         plot.y_range.start = 0 
