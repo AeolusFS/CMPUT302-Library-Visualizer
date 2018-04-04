@@ -38,22 +38,73 @@
     </div>
     {% endfor %}
 
-    <div class="card-footer">
-        <ul class="nav nav-tabs card-header-tabs">
-            {% for visualization in visualization_names %}
-            <li class="nav-item small">
-                {% if forloop.first %}
-                <a class="nav-link active" id="nav{{visualization}}" href="#" onclick="changeNav('{{visualization}}')">{{visualization}}</a>
-                {% else %}
-                <a class="nav-link" id="nav{{visualization}}" href="#" onclick="changeNav('{{visualization}}')">{{visualization}}</a>
-                {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
+    <div class="card-footer" style="padding:5px;">
+        <img src="{% static 'open-iconic/svg/chevron-left.svg' %}" alt='left arrow' class="scroller scroller-left">
+        <img src="{% static 'open-iconic/svg/chevron-right.svg' %}" alt='right arrow' class="scroller scroller-right">
+        <div class="wrapper">
+            <ul class="nav nav-tabs list">
+                {% for visualization in visualization_names %}
+                <li class="small">
+                    {% if forloop.first %}
+                    <a class="nav-link active" id="nav{{visualization}}" href="#" onclick="changeNav('{{visualization}}')">{{visualization}}</a>
+                    {% else %}
+                    <a class="nav-link" id="nav{{visualization}}" href="#" onclick="changeNav('{{visualization}}')">{{visualization}}</a>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>
 
+<!-- Scroller JS and CSS from https://www.bootply.com/l2ChB4vYmC , with modification -->
 
+<style>
+    .wrapper {
+        position:relative;
+        margin:0 auto;
+        overflow:hidden;
+        padding:5px;
+        height:30px;
+    }
+
+    .list {
+        position:absolute;
+        left:0px;
+        top:0px;
+        min-width:3000px;
+        margin-left:12px;
+        margin-top:0px;
+    }
+
+    .list li{
+        display:table-cell;
+        position:relative;
+        text-align:center;
+        cursor:grab;
+        cursor:-webkit-grab;
+        color:#efefef;
+        vertical-align:middle;
+    }
+
+    .scroller {
+        text-align:center;
+        cursor:pointer;
+        display:none;
+        padding:10px;
+        padding-top:11px;
+        white-space:no-wrap;
+        vertical-align:middle;
+    }
+
+    .scroller-right{
+        float:right;
+    }
+
+    .scroller-left {
+        float:left;
+    }
+</style>
 <script>
     function changeNav(id) {
         document.getElementById(id).style.display = "Block";
@@ -73,6 +124,70 @@
         }
     }
     
+    var hidWidth;
+    var scrollBarWidths = 40;
+
+    var widthOfList = function(){
+    var itemsWidth = 0;
+    $('.list li').each(function(){
+        var itemWidth = $(this).outerWidth();
+        itemsWidth+=itemWidth;
+    });
+    return itemsWidth;
+    };
+
+    var widthOfHidden = function(){
+    return (($('.wrapper').outerWidth())-widthOfList()-getLeftPosi())-scrollBarWidths;
+    };
+
+    var getLeftPosi = function(){
+    return $('.list').position().left;
+    };
+
+    var reAdjust = function(){
+    if (($('.wrapper').outerWidth()) < widthOfList()) {
+        $('.scroller-right').show();
+    }
+    else {
+        $('.scroller-right').hide();
+    }
+    
+    if (getLeftPosi()<0) {
+        $('.scroller-left').show();
+    }
+    else {
+        $('.item').animate({left:"-="+getLeftPosi()+"px"},'slow');
+        $('.scroller-left').hide();
+    }
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+        reAdjust();
+    });
+
+    $(window).on('resize',function(e){  
+        reAdjust();
+    });
+
+    $('.scroller-right').click(function() {
+    
+    $('.scroller-left').fadeIn('slow');
+    $('.scroller-right').fadeOut('slow');
+    
+    $('.list').animate({left:"+="+widthOfHidden()+"px"},'slow',function(){
+
+    });
+    });
+
+    $('.scroller-left').click(function() {
+    
+        $('.scroller-right').fadeIn('slow');
+        $('.scroller-left').fadeOut('slow');
+    
+        $('.list').animate({left:"-="+getLeftPosi()+"px"},'slow',function(){
+        
+        });
+    });
+
     </script>
 
 {% endblock %}
