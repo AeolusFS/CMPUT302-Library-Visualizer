@@ -10,9 +10,6 @@ This might be good. This could be bad. All I know is that it'll be pretty rough,
 
 	$ git clone https://github.com/skaefer143/CMPUT302-Library-Visualizer
 
-**Install xlrd to read xlsx file**
-
-	$ pip3 install xlrd --upgrade
 
 **Install virtual environment and create a virtualenv instance:**
 	
@@ -32,6 +29,10 @@ This might be good. This could be bad. All I know is that it'll be pretty rough,
 	Then:
 	Navigate back to main folder, and type
 	$ pip3 install -r requirements.txt
+
+**Install xlrd to read xlsx file**
+
+	$ pip3 install xlrd --upgrade
 	
 **Migrate the database to get model schema: (not required, do it anyways)**
 
