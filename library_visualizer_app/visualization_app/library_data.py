@@ -1,8 +1,10 @@
 # This file will store python variables, or something, full of the data we want to display
+lib_info = {}
 lib_name = ['junit4', 'testng', 'slf4j', 'log4j2', 'logback', 'commons logging', 'tinylog', 'blitz4j', 'minlog', 'guava', 'commons lang', 'mockito', 'easymock', 'powermock', 'jmock', 'bouncycastle', 'commons crypto', 'conceal', 'chimera', 'spongycastle', 'keyczar', 'conscrypt', 'gson', 'json simple', 'h2', 'derby', 'shiro', 'spring security', 'hibernate orm', 'mybatis3', 'ormlite', 'xerces2-j', 'dom4j', 'jdom']
 
 # lib_info format
 #    ' ':{
+#        'Name':'',
 #        'Git_Rep': ,                                      
 #        'Domain': ,                                       
 #        'Popularity_Count': ,                   
@@ -27,7 +29,21 @@ lib_name = ['junit4', 'testng', 'slf4j', 'log4j2', 'logback', 'commons logging',
 # lib_info[junit4][Git_Rep] = junit-team/junit4
 # lib_info[junit4][issue_data][1][Performance_Issue] = False
 
-lib_info = {
+for name in lib_name:
+    lib_info[name] = {
+       'Name':name,
+       'Git_Rep': '',                                      
+       'Domain': '',                                       
+       'Popularity_Count': 0,                   
+       'Last_Modification_Date': '',                         
+       'Last_Discussed_SO': '',
+       '#_Questions_Asked_SO': 0,
+       'Release_Dates':[],
+       '#_Breaking_Changes':[],
+       'issue_data':{}
+   }
+
+update_lib = {
     'junit4':{
         'Name': 'junit4',
         'Git_Rep':'junit-team/junit4',
@@ -68,3 +84,7 @@ lib_info = {
         'Popularity_Count':5380,
     }
 }
+
+lib_info.update(update_lib)
+
+

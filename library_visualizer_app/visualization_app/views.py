@@ -48,9 +48,9 @@ def visualization(request):
             library_popularity.append(library['Popularity_Count'])
         
 
-        # Popularity Count Graph
+    # ----- Popularity Count Graph
         plot = figure(x_range=library_names, plot_height=400, title="Popularity Counts")
-        plot.vbar(x=library_names, top=library_popularity, width=0.6)
+        plot.vbar(x=library_names, top=library_popularity, width=0.2)
 
         plot.xgrid.grid_line_color = None
         plot.y_range.start = 0 
@@ -61,7 +61,7 @@ def visualization(request):
         visualizations[0].append(div)
 
 
-        # Release Frequency Graph
+    # ----- Release Frequency Graph
         x= [1,3,5,7,9,11,13]
         y= [1,2,3,4,5,6,7]
         title = 'y = f(x)'
@@ -78,7 +78,36 @@ def visualization(request):
         visualizations[1].append(script)
         visualizations[1].append(div)
 
-
+    # ----- Last Modified Date
+    
+    
+        # Store components - visualizations[2] is Last Modified Date
+        
+    # ----- Backwards Compatibility
+    
+    
+        # Store components - visualizations[3] is Backwards Compatibility
+        
+    # ----- Stack Overflow
+    
+    
+        # Store components - visualizations[4] is Stack Overflow
+        
+    # ----- Security & Performance
+    
+    
+        # Store components - visualizations[5] is Security & Performance
+        
+    # ----- Issue Data Response Time
+    
+    
+        # Store components - visualizations[6] is Issue Data Response Time
+        
+    # ----- Issue Data Resolved Time
+    
+    
+        # Store components - visualizations[7] is Issue Data Resolved Time
+        
         #Feed them to the Django template.
         return render(request, 'visualization_app/visualizations.html', {
             'visualizations' : visualizations,

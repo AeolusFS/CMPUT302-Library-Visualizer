@@ -22,7 +22,7 @@ This might be good. This could be bad. All I know is that it'll be pretty rough,
 	$ source myvenv/bin/activate
 	On Windows:
 	$ cd myvenv/Scripts/ 
-	$ activate
+	$ activate.bat
 
 	Make sure your command line has a (myvenv) prefixed to your input line
 	Then:
