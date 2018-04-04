@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from bokeh.plotting import figure, output_file, show 
+from bokeh.plotting import figure, output_file, show
 from bokeh.embed import components
 
 from visualization_app.library_data import lib_info, lib_name
@@ -9,7 +9,7 @@ from visualization_app.library_data import lib_info, lib_name
 def index(request):
     # pass in each library as an array to the template
     # library data can be made in another py file and imported here
-    testing_libraries = [lib_info['testinglibrary'], lib_info['testng'], lib_info['junit4']]
+    testing_libraries = [lib_info['testng'], lib_info['junit4']]
     mock_libraries = [lib_info['mockito']]
     all_libraries = [testing_libraries, mock_libraries]
 
@@ -21,7 +21,7 @@ def visualization(request):
     if request.method == 'POST':
         print(request.POST) # The library names should appear in the request dictionary
         # Check with libraries are here, then display them. If empty, well dang, the person submitted an empty form. Display nothing
-        
+
         # Do this for all libraries
         compare_libraries = []
         if 'junit4' in request.POST:
@@ -33,7 +33,7 @@ def visualization(request):
         if 'mockito' in request.POST:
             compare_libraries.append(lib_info['mockito'])
         # Add more here for more libraries
-        
+
         # List of all the different visualization names
         visualizations = [["Popularity Count"], ["Release Frequency"], ["Last Modified Date"], \
         ["Backwards Compatibility"], ["Stack Overflow"], ["Security & Performance"], ["Issue Data Response Time"], ["Issue Data Resolved Time"]]
@@ -46,14 +46,14 @@ def visualization(request):
         for library in compare_libraries:
             library_names.append(library['Name'])
             library_popularity.append(library['Popularity_Count'])
-        
+
 
     # ----- Popularity Count Graph
         plot = figure(x_range=library_names, plot_height=400, title="Popularity Counts")
         plot.vbar(x=library_names, top=library_popularity, width=0.2)
 
         plot.xgrid.grid_line_color = None
-        plot.y_range.start = 0 
+        plot.y_range.start = 0
 
         # Store components - visualizations[0] is Popularity Count
         script, div = components(plot)
@@ -66,9 +66,9 @@ def visualization(request):
         y= [1,2,3,4,5,6,7]
         title = 'y = f(x)'
 
-        plot = figure(title= title , 
-            x_axis_label= 'X-Axis', 
-            y_axis_label= 'Y-Axis', 
+        plot = figure(title= title ,
+            x_axis_label= 'X-Axis',
+            y_axis_label= 'Y-Axis',
             plot_width =400,
             plot_height =400)
 
@@ -79,40 +79,39 @@ def visualization(request):
         visualizations[1].append(div)
 
     # ----- Last Modified Date
-    
-    
+
+
         # Store components - visualizations[2] is Last Modified Date
-        
+
     # ----- Backwards Compatibility
-    
-    
+
+
         # Store components - visualizations[3] is Backwards Compatibility
-        
+
     # ----- Stack Overflow
-    
-    
+
+
         # Store components - visualizations[4] is Stack Overflow
-        
+
     # ----- Security & Performance
-    
-    
+
+
         # Store components - visualizations[5] is Security & Performance
-        
+
     # ----- Issue Data Response Time
-    
-    
+
+
         # Store components - visualizations[6] is Issue Data Response Time
-        
+
     # ----- Issue Data Resolved Time
-    
-    
+
+
         # Store components - visualizations[7] is Issue Data Resolved Time
-        
+
         #Feed them to the Django template.
         return render(request, 'visualization_app/visualizations.html', {
             'visualizations' : visualizations,
         })
-    
+
     else:
         return redirect('/') # Go back to main screen
-

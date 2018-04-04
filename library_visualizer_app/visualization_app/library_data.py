@@ -1,19 +1,19 @@
-# This library will import all the data from xlsx file and store 
+# This library will import all the data from xlsx file and store
 # in python dictionary with the format below
 
 # lib_info format
 #    ' ':{
 #        'Name':'',
-#        'Git_Rep': ,                                      
-#        'Domain': ,                                       
-#        'Popularity_Count': ,                   
-#        'Last_Modification_Date':                         
+#        'Git_Rep': ,
+#        'Domain': ,
+#        'Popularity_Count': ,
+#        'Last_Modification_Date':
 #        'Last_Discussed_SO':' ',
 #        '#_Questions_Asked_SO': ,
 #        'Release_Dates':[],
 #        '#_Breaking_Changes':[],
 #        'issue_data':{
-#            1:{                                         
+#            1:{
 #               'Issue_Creation_Date':' ',
 #               'Issue_Close_Date':' ',
 #               'Date_of_First_Comment': ,
@@ -36,7 +36,7 @@ def remove_values_from_list(the_list, value):
         the_list.remove(value)
 
 # Read xlsx and initialize datemode
-data = xlrd.open_workbook('Metric_Data.xlsx')
+data = xlrd.open_workbook(r"C:\Users\Zakia\Desktop\302Project\library_visualizer_app\visualization_app\Metric_Data.xlsx")
 lib_info = {}
 
 data_datemode = data.datemode
@@ -108,10 +108,10 @@ for i in range(1,nrows):
         'Last_Modification_Date':("{0}-{1}-{2}".format(y, m, d))
     }
     lib_info[row_value[0]].update(lib_update)
-    
-    
-    
-    
+
+
+
+
 
 # Read chart Backwards Compatibility
 table = data.sheet_by_name('Backwards Compatibility')
@@ -159,5 +159,5 @@ nrows = table.nrows
 
 for i in range(0,nrows):
     STATUS = 'NOT FOUND'
-    
-print (lib_info)    
+
+print (lib_info)
