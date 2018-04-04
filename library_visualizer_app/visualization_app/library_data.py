@@ -48,5 +48,23 @@ lib_info = {
             },
             2:{}
         }
+    },
+    'testinglibrary':{
+        'Name': 'testinglibrary',
+        'Git_Rep':'skaefer143',
+        'Domain':'Testing',
+        'Popularity_Count':5000,
+    },
+    'testng':{
+        'Name': 'testng',
+        'Git_Rep':'cbeust/testng',
+        'Domain':'Testing',
+        'Popularity_Count':3846,
+    },
+    'mockito':{
+        'Name': 'mockito',
+        'Git_Rep':'mockito/mockito',
+        'Domain':'Mocking',
+        'Popularity_Count':5380,
     }
 }

@@ -13,23 +13,23 @@
         LibHub</h3>
     </div>
 
-    {% for visualization in visualization_names %}
+    {% for visualization in visualizations %}
     {% if forloop.first %}
-    <div id="{{visualization}}" class="mx-auto card-body" style="display: Block; width: 500px;">
+    <div id="{{visualization.0}}" class="mx-auto card-body" style="display: Block; width: 500px;">
     {% else %}
-    <div id="{{visualization}}" class="mx-auto card-body" style="display: None; width: 500px;">
+    <div id="{{visualization.0}}" class="mx-auto card-body" style="display: None; width: 500px;">
     {% endif %}
         <div style="text-align: center;">
-            This is the visualization page for {{visualization}}.
+            This is the visualization page for {{visualization.0}}.
         </div>
         <div style="text-align: center;">
             I can't center this stupid graph below me! Wtf!
         </div>
 
         <div style="margin: auto;">
-            {{ div | safe }}
+            {{ visualization.2 | safe }}
         </div>
-            {{ script | safe }}
+            {{ visualization.1 | safe }}
 
 
         <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.14.min.js"></script>
@@ -43,12 +43,12 @@
         <img src="{% static 'open-iconic/svg/chevron-right.svg' %}" alt='right arrow' class="scroller scroller-right">
         <div class="wrapper">
             <ul class="nav nav-tabs list">
-                {% for visualization in visualization_names %}
+                {% for visualization in visualizations %}
                 <li class="small">
                     {% if forloop.first %}
-                    <a class="nav-link active" id="nav{{visualization}}" href="#" onclick="changeNav('{{visualization}}')">{{visualization}}</a>
+                    <a class="nav-link active" id="nav{{visualization.0}}" href="#" onclick="changeNav('{{visualization.0}}')">{{visualization.0}}</a>
                     {% else %}
-                    <a class="nav-link" id="nav{{visualization}}" href="#" onclick="changeNav('{{visualization}}')">{{visualization}}</a>
+                    <a class="nav-link" id="nav{{visualization.0}}" href="#" onclick="changeNav('{{visualization.0}}')">{{visualization.0}}</a>
                     {% endif %}
                 </li>
                 {% endfor %}
