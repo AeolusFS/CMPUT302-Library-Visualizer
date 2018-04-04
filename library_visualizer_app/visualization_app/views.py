@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from bokeh.plotting import figure, output_file, show
-from bokeh.embed import components
+import pygal
 
 from visualization_app.library_data import lib_info, lib_name
 
@@ -136,34 +135,15 @@ def visualization(request):
 
 
     # ----- Popularity Count Graph
-        plot = figure(x_range=library_names, plot_height=400, title="Popularity Counts")
-        plot.vbar(x=library_names, top=library_popularity, width=0.2)
-
-        plot.xgrid.grid_line_color = None
-        plot.y_range.start = 0
-
-        # Store components - visualizations[0] is Popularity Count
-        script, div = components(plot)
-        visualizations[0].append(script) # Ensure it is this order
-        visualizations[0].append(div)
-
+        bar_chart = pygal.Bar()
+        bar_chart.title = 'Repository Popularity Count for Compared Libraries'
+        bar_chart.x_labels = library_names
+        bar_chart.add('Popularity', library_popularity)
+        visualizations[0].append(bar_chart.render_data_uri())
+        # with help from http://pygal.org/en/stable/documentation/output.html
 
     # ----- Release Frequency Graph
-        x= [1,3,5,7,9,11,13]
-        y= [1,2,3,4,5,6,7]
-        title = 'y = f(x)'
-
-        plot = figure(title= title ,
-            x_axis_label= 'X-Axis',
-            y_axis_label= 'Y-Axis',
-            plot_width =400,
-            plot_height =400)
-
-        plot.line(x, y, legend= 'f(x)', line_width = 2)
-        # Store components - visualizations[1] is Release Frequency
-        script, div = components(plot)
-        visualizations[1].append(script)
-        visualizations[1].append(div)
+        
 
     # ----- Last Modified Date
 

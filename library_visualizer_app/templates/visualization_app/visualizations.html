@@ -4,9 +4,6 @@
 {% block app %}
 <div class="card">
 
-<link href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.14.min.css" rel="stylesheet" type="text/css">
-<link href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.14.min.css" rel="stylesheet" type="text/css">
-
     <div class="card-header">
         <h3 style="margin: 0;"><a href="{% url 'index' %}" style="display:inline-block;">
         <img src="{% static 'open-iconic/svg/arrow-thick-left.svg' %}" alt='back arrow' style="height: 36px; margin: auto;"></a>
@@ -22,18 +19,10 @@
         <div style="text-align: center;">
             This is the visualization page for {{visualization.0}}.
         </div>
-        <div style="text-align: center;">
-            I can't center this stupid graph below me! Wtf!
-        </div>
 
-        <div style="margin: auto;">
-            {{ visualization.2 | safe }}
-        </div>
-            {{ visualization.1 | safe }}
-
-
-        <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.14.min.js"></script>
-        <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.14.min.js"></script>
+        <figure>
+            <embed type="image/svg+xml" src={{ visualization.1|safe }} />
+        </figure>
 
     </div>
     {% endfor %}
