@@ -131,21 +131,26 @@ def visualization(request):
         # set up library arrays
         library_names = []
         library_popularity = []
-        library_QA_SO = []
         library_releasedates = []
         library_lastModifiedDate = []
         library_breakingChanges = []
+        library_QA_SO = []
+        library_lastDiscussedSO = []
         for library in compare_libraries:
             library_names.append(library['Name'])
             library_popularity.append(library['Popularity_Count'])
-            library_QA_SO.append(library['#_Questions_Asked_SO'])
             releaseDates = []
             for releaseDate in library['Release_Dates']:
                 releaseDates.append(datetime.strptime(releaseDate, "%Y-%m-%d"))
             library_releasedates.append(releaseDates)
             library_lastModifiedDate.append(datetime.strptime(library['Last_Modification_Date'], "%Y-%m-%d"))
             library_breakingChanges.append(library['#_Breaking_Changes'])
-
+            library_QA_SO.append(library['#_Questions_Asked_SO'])
+            try:
+                library_lastDiscussedSO.append(datetime.strptime(library['Last_Discussed_SO'], "%Y-%m-%d"))
+            except: # No date
+                library_lastDiscussedSO.append(None)
+                
     #--------- CUSTOM STYLE, USE THIS -----------------#
         custom_style = Style(
             label_font_size = 25,
@@ -247,6 +252,26 @@ def visualization(request):
         visualizations[4].append(bar_chart.render_data_uri())
         # Store components - visualizations[4] is Stack Overflow
 
+        # Second chart
+        dateline = pygal.DateLine(
+            x_label_rotation=20, 
+            show_y_labels=False,
+            legend_at_bottom=True, 
+            style=custom_style, 
+            height=400,
+            show_x_guides=True)
+        dateline.title = 'Last Discussed on Stack Overflow'
+
+        notDiscussed = []
+        for index in range(len(library_lastDiscussedSO)):
+            dateline.add(library_names[index], [(library_lastDiscussedSO[index], 0.5)], dots_size=25)
+            if library_lastDiscussedSO[index] == None:
+                notDiscussed.append(library_names[index])
+
+        visualizations[4].append(dateline.render_data_uri())
+        # Store components - visualizations[4] is Stack Overflow
+        
+
     # ----- Security & Performance
 
 
@@ -265,6 +290,7 @@ def visualization(request):
         #Feed them to the Django template.
         return render(request, 'visualization_app/visualizations.html', {
             'visualizations' : visualizations,
+            'notDiscussed' : notDiscussed,
         })
 
     else:

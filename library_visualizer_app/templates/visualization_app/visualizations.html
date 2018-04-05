@@ -16,10 +16,22 @@
     {% else %}
     <div id="{{visualization.0}}" class="mx-auto card-body" style="display: None; width: 700px;">
     {% endif %}
-        <figure>
-            <embed type="image/svg+xml" src={{ visualization.1|safe }} />
-        </figure>
 
+    {% if visualization.0 == "Stack Overflow" %}
+    <figure>
+        <embed type="image/svg+xml" src={{ visualization.1|safe }} />
+    </figure>
+    <figure>
+        <embed type="image/svg+xml" src={{ visualization.2|safe }} />
+    </figure>
+    {% for libraryname in notDiscussed %}
+    <h5 style="text-align:center;">! - {{ libraryname }} was not discussed.</h5>
+    {% endfor %}
+    {% else %}
+    <figure>
+        <embed type="image/svg+xml" src={{ visualization.1|safe }} />
+    </figure>
+    {% endif %}
     </div>
     {% endfor %}
 
