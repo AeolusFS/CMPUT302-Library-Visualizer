@@ -12,9 +12,9 @@
 
     {% for visualization in visualizations %}
     {% if forloop.first %}
-    <div id="{{visualization.0}}" class="mx-auto card-body" style="display: Block; width: 500px;">
+    <div id="{{visualization.0}}" class="mx-auto card-body" style="display: Block; width: 700px;">
     {% else %}
-    <div id="{{visualization.0}}" class="mx-auto card-body" style="display: None; width: 500px;">
+    <div id="{{visualization.0}}" class="mx-auto card-body" style="display: None; width: 700px;">
     {% endif %}
         <figure>
             <embed type="image/svg+xml" src={{ visualization.1|safe }} />

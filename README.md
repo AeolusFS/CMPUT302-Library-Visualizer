@@ -1,6 +1,5 @@
 # CMPUT 302 Library Visualizer Hi-Fidelity Prototype
 
-This might be good. This could be bad. All I know is that it'll be pretty rough, and not 100% perfect.
 
 # To Install and Run on the command line:
 

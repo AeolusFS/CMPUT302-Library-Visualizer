@@ -31,7 +31,7 @@ def index(request):
 
 def visualization(request):
     if request.method == 'POST':
-        print(request.POST) # The library names should appear in the request dictionary
+        # print(request.POST) # The library names should appear in the request dictionary
         # Check with libraries are here, then display them. If empty, well dang, the person submitted an empty form. Display nothing
 
         # Do this for all libraries
@@ -149,6 +149,7 @@ def visualization(request):
     #--------- CUSTOM STYLE, USE THIS -----------------#
         custom_style = Style(
             label_font_size = 25,
+            major_label_font_size = 25,
             value_font_size = 25,
             value_label_font_size = 25,
             title_font_size = 25,
@@ -202,7 +203,8 @@ def visualization(request):
             style=custom_style, 
             height=400,
             show_x_guides=True)
-        dateline.x_labels = allMonths
+        # ALSO DON'T NEED - just pollutes the x - axis 
+        # dateline.x_labels = allMonths
         dateline.title = 'Repository Last Modified Date'
 
         for index in range(len(library_lastModifiedDate)):
@@ -226,11 +228,11 @@ def visualization(request):
         # DON'T NEED - bar_chart.x_labels = map(lambda d: d.strftime('%Y-%m-%d'), allDates)
         for libraryIndex in range(len(library_breakingChanges)):
             release_breakingChange_tuples = []
-            print(str(len(library_releasedates[libraryIndex])) + " - " + str(len(library_breakingChanges[libraryIndex])))
+            #print(str(len(library_releasedates[libraryIndex])) + " - " + str(len(library_breakingChanges[libraryIndex])))
             for dateIndex in range(min(len(library_releasedates[libraryIndex]), len(library_breakingChanges[libraryIndex]))): 
                 # So, breaking changes and released dates aren't exactly the same. That's why we look for min(), so things dont break
                 release_breakingChange_tuples.append((library_releasedates[libraryIndex][dateIndex], library_breakingChanges[libraryIndex][dateIndex]))
-            bar_chart.add(library_names[libraryIndex], release_breakingChange_tuples)
+            bar_chart.add(library_names[libraryIndex], release_breakingChange_tuples, dots_size=5)
 
         visualizations[3].append(bar_chart.render_data_uri())
         # Store components - visualizations[3] is Backwards Compatibility
