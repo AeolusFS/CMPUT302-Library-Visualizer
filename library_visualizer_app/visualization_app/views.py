@@ -127,10 +127,8 @@ def visualization(request):
         # List of all the different visualization names
         visualizations = [["Popularity Count"], ["Release Frequency"], ["Last Modified Date"], \
         ["Backwards Compatibility"], ["Stack Overflow"], ["Security & Performance"], ["Issue Data Response Time"], ["Issue Data Resolved Time"]]
-        script = []
-        div = []
 
-
+        # set up library arrays
         library_names = []
         library_popularity = []
         library_QA_SO = []
@@ -141,7 +139,10 @@ def visualization(request):
             library_names.append(library['Name'])
             library_popularity.append(library['Popularity_Count'])
             library_QA_SO.append(library['#_Questions_Asked_SO'])
-            library_releasedates.append(library['Release_Dates'])
+            releaseDates = []
+            for releaseDate in library['Release_Dates']:
+                releaseDates.append(datetime.strptime(releaseDate, "%Y-%m-%d"))
+            library_releasedates.append(releaseDates)
             library_lastModifiedDate.append(datetime.strptime(library['Last_Modification_Date'], "%Y-%m-%d"))
             library_breakingChanges.append(library['#_Breaking_Changes'])
 
@@ -151,11 +152,14 @@ def visualization(request):
             value_font_size = 25,
             value_label_font_size = 25,
             title_font_size = 25,
-            legend_font_size = 25)
+            legend_font_size = 25,
+            tooltip_font_size = 25)
 
 
     # ----- Popularity Count Graph
-        bar_chart = pygal.Bar(style=custom_style)
+        bar_chart = pygal.Bar(
+            style=custom_style,
+            legend_at_bottom=True)
         bar_chart.title = 'Repository Popularity Count for Compared Libraries'
         #bar_chart.x_labels = library_names
         for libraries in range(len(library_popularity)):
@@ -172,29 +176,31 @@ def visualization(request):
     # ----- Release Frequency Graph
         dateline = pygal.DateLine(
             show_y_labels=False, 
-            x_label_rotation=20, 
+            x_label_rotation=25, 
             style=custom_style, 
-            height=200, 
+            height=400,
+            legend_at_bottom=True,
             show_x_guides=True)
-        for libraries in range(len(library_releasedates)):
-            for dates in range(len(library_releasedates[libraries])):
-                #https://stackoverflow.com/questions/466345/converting-string-into-datetime
-                library_releasedates[libraries][dates] = datetime.strptime(library_releasedates[libraries][dates], '%Y-%m-%d').date()
-        for libraries in range(len(library_releasedates)):
-            dateline.add(library_names[libraries], library_releasedates[libraries], dots_size=15)
+        dateline.title = "Release Frequency Graph"
+        for index in range(len(library_releasedates)):
+            releaseDatesTuple = []
+            for releaseDatesIndex in range(len(library_releasedates)):
+                releaseDatesTuple.append((library_releasedates[index][releaseDatesIndex], 0.5))
+            dateline.add(library_names[index], releaseDatesTuple, dots_size=15)
         visualizations[1].append(dateline.render_data_uri())
 
+
     # ----- Last Modified Date
+        # Make x_labels, one month before min and one month after max
         firstDisplayedDate = getMonthDelta(min(library_lastModifiedDate), -1) # Get a month before min date
         lastDisplayedDate = getMonthDelta(max(library_lastModifiedDate), 1) # Get a month after
-        print(library_lastModifiedDate)
-        print(str(firstDisplayedDate) + " " + str(lastDisplayedDate))
         allMonths = monthsInBetween(firstDisplayedDate, lastDisplayedDate)
         dateline = pygal.DateLine(
             x_label_rotation=20, 
-            show_y_labels=False, 
+            show_y_labels=False,
+            legend_at_bottom=True, 
             style=custom_style, 
-            height=200, 
+            height=400,
             show_x_guides=True)
         dateline.x_labels = allMonths
         dateline.title = 'Repository Last Modified Date'
@@ -206,14 +212,23 @@ def visualization(request):
         # Store components - visualizations[2] is Last Modified Date
 
     # ----- Backwards Compatibility
-        bar_chart = pygal.Bar(
+        # make the x-axis labels pretty
+        # allDates = []
+        # for library_datelist in library_releasedates:
+        #     allDates += library_datelist
+
+        bar_chart = pygal.DateLine(
             style=custom_style,
+            x_label_rotation=25,
+            legend_at_bottom=True,
             show_x_guides=True)
         bar_chart.title = 'Number of Breaking Changes'
-        #bar_chart.x_labels = str(library_releasedates)
-        for index in range(len(library_breakingChanges)):
-            bar_chart.add(library_names[index], library_breakingChanges[index]) 
-            # library_releasedates works because release date corresponds to breaking change index
+        # DON'T NEED - bar_chart.x_labels = map(lambda d: d.strftime('%Y-%m-%d'), allDates)
+        for libraryIndex in range(len(library_breakingChanges)):
+            release_breakingChange_tuples = []
+            for dateIndex in range(len(library_releasedates)):
+                release_breakingChange_tuples.append((library_releasedates[libraryIndex][dateIndex], library_breakingChanges[libraryIndex][dateIndex]))
+            bar_chart.add(library_names[libraryIndex], release_breakingChange_tuples)
 
         visualizations[3].append(bar_chart.render_data_uri())
         # Store components - visualizations[3] is Backwards Compatibility
@@ -225,8 +240,8 @@ def visualization(request):
         for libraries in range(len(library_QA_SO)):
             bar_chart.add(library_names[libraries], library_QA_SO[libraries])
 
-        # Store components - visualizations[4] is Stack Overflow
         visualizations[4].append(bar_chart.render_data_uri())
+        # Store components - visualizations[4] is Stack Overflow
 
     # ----- Security & Performance
 
