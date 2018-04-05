@@ -182,11 +182,11 @@ def visualization(request):
             legend_at_bottom=True,
             show_x_guides=True)
         dateline.title = "Release Frequency Graph"
-        for index in range(len(library_releasedates)):
+        for libraryIndex in range(len(library_releasedates)):
             releaseDatesTuple = []
-            for releaseDatesIndex in range(len(library_releasedates)):
-                releaseDatesTuple.append((library_releasedates[index][releaseDatesIndex], 0.5))
-            dateline.add(library_names[index], releaseDatesTuple, dots_size=15)
+            for releaseDatesIndex in range(len(library_releasedates[libraryIndex])):
+                releaseDatesTuple.append((library_releasedates[libraryIndex][releaseDatesIndex], 0.5))
+            dateline.add(library_names[libraryIndex], releaseDatesTuple, dots_size=15)
         visualizations[1].append(dateline.render_data_uri())
 
 
@@ -226,7 +226,9 @@ def visualization(request):
         # DON'T NEED - bar_chart.x_labels = map(lambda d: d.strftime('%Y-%m-%d'), allDates)
         for libraryIndex in range(len(library_breakingChanges)):
             release_breakingChange_tuples = []
-            for dateIndex in range(len(library_releasedates)):
+            print(str(len(library_releasedates[libraryIndex])) + " - " + str(len(library_breakingChanges[libraryIndex])))
+            for dateIndex in range(min(len(library_releasedates[libraryIndex]), len(library_breakingChanges[libraryIndex]))): 
+                # So, breaking changes and released dates aren't exactly the same. That's why we look for min(), so things dont break
                 release_breakingChange_tuples.append((library_releasedates[libraryIndex][dateIndex], library_breakingChanges[libraryIndex][dateIndex]))
             bar_chart.add(library_names[libraryIndex], release_breakingChange_tuples)
 
