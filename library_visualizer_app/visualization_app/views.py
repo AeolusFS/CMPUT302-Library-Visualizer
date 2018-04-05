@@ -136,12 +136,14 @@ def visualization(request):
         library_QA_SO = []
         library_releasedates = []
         library_lastModifiedDate = []
+        library_breakingChanges = []
         for library in compare_libraries:
             library_names.append(library['Name'])
             library_popularity.append(library['Popularity_Count'])
             library_QA_SO.append(library['#_Questions_Asked_SO'])
             library_releasedates.append(library['Release_Dates'])
             library_lastModifiedDate.append(datetime.strptime(library['Last_Modification_Date'], "%Y-%m-%d"))
+            library_breakingChanges.append(library['#_Breaking_Changes'])
 
     #--------- CUSTOM STYLE, USE THIS -----------------#
         custom_style = Style(
@@ -204,8 +206,16 @@ def visualization(request):
         # Store components - visualizations[2] is Last Modified Date
 
     # ----- Backwards Compatibility
+        bar_chart = pygal.Bar(
+            style=custom_style,
+            show_x_guides=True)
+        bar_chart.title = 'Number of Breaking Changes'
+        #bar_chart.x_labels = str(library_releasedates)
+        for index in range(len(library_breakingChanges)):
+            bar_chart.add(library_names[index], library_breakingChanges[index]) 
+            # library_releasedates works because release date corresponds to breaking change index
 
-
+        visualizations[3].append(bar_chart.render_data_uri())
         # Store components - visualizations[3] is Backwards Compatibility
 
     # ----- Stack Overflow
