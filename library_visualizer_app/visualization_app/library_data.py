@@ -14,7 +14,7 @@ import os
 #        '#_Questions_Asked_SO': ,
 #        'Release_Dates':[],
 #        '#_Breaking_Changes':[],
-#        'issue_data':{
+#        'Issue_data':{
 #            1:{
 #               'Issue_Creation_Date':' ',
 #               'Issue_Close_Date':' ',
@@ -36,6 +36,18 @@ import xlrd
 def remove_values_from_list(the_list, value):
     while value in the_list:
         the_list.remove(value)
+        
+def check_date_none(date_value):
+    if date_value != 'None':
+        try:
+            y, m, d, h, mi, s = xlrd.xldate_as_tuple(date_value, data_datemode)
+            return_value = ("{0}-{1}-{2} {3}:{4}:{5}".format(y, m, d, h, mi, s))
+        except:
+            return_value = date_value
+        return return_value
+    else:
+        return 'None'
+    
 
 # Read xlsx and initialize datemode
 #INSERT YOUR OWN PATH TO THE Metric_Data.xlsx HERE
@@ -60,9 +72,11 @@ for i in range(1,nrows):
     lib_update = {
         'Name':row_value[0],
         'Git_Rep':row_value[1],
-        'Domain':row_value[2]
+        'Domain':row_value[2],
+        'Issue_Data':{}
     }
     lib_info[row_value[0]].update(lib_update)
+
 
 
 
@@ -137,7 +151,6 @@ for i in range(1,ncols):
 
 
 
-
 # Read chart Last Discussed on Stack Overflow
 table = data.sheet_by_name('Last Discussed on Stack Overflo')
 nrows = table.nrows
@@ -161,8 +174,22 @@ for i in range(1,nrows):
 # Read chart Issue Data
 table = data.sheet_by_name('Issue Data')
 nrows = table.nrows
+n=0
 
-for i in range(0,nrows):
-    STATUS = 'NOT FOUND'
+for i in range(1,nrows):
+    row_value = table.row_values(i)
+    if row_value[1] == 'EsotericSoftware/minlog':
+        row_value[1] = 'minlog'
+    lib_update = {
+        str(row_value[0]):{
+            'Issue_Creation_Date':check_date_none(row_value[2]),
+            'Issue_Close_Date':check_date_none(row_value[3]),
+            'Date_of_First_Comment':check_date_none(row_value[4]),
+            'Performance_Issue':row_value[5],
+            'Security_Issue':row_value[6]
+        }
+    }
+    lib_info[row_value[1]]['Issue_Data'].update(lib_update)
 
-# print (lib_info)
+# For testing print
+# print (lib_info['hibernate orm']['Issue_Data']['HHH-12320'])
