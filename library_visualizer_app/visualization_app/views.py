@@ -2,10 +2,12 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 
 import pygal
+from pygal.style import Style
 
 from visualization_app.library_data import lib_info, lib_name
 
 from datetime import date, datetime, timedelta
+from dateutil import relativedelta
 
 def index(request):
     # pass in each library as an array to the template
@@ -133,15 +135,25 @@ def visualization(request):
         library_popularity = []
         library_QA_SO = []
         library_releasedates = []
+        library_lastModifiedDate = []
         for library in compare_libraries:
             library_names.append(library['Name'])
             library_popularity.append(library['Popularity_Count'])
             library_QA_SO.append(library['#_Questions_Asked_SO'])
             library_releasedates.append(library['Release_Dates'])
+            library_lastModifiedDate.append(datetime.strptime(library['Last_Modification_Date'], "%Y-%m-%d"))
+
+    #--------- CUSTOM STYLE, USE THIS -----------------#
+        custom_style = Style(
+            label_font_size = 25,
+            value_font_size = 25,
+            value_label_font_size = 25,
+            title_font_size = 25,
+            legend_font_size = 25)
 
 
     # ----- Popularity Count Graph
-        bar_chart = pygal.Bar()
+        bar_chart = pygal.Bar(style=custom_style)
         bar_chart.title = 'Repository Popularity Count for Compared Libraries'
         #bar_chart.x_labels = library_names
         for libraries in range(len(library_popularity)):
@@ -156,18 +168,39 @@ def visualization(request):
         date_list = [today - timedelta(days=x) for x in range(0, 365)]
         #dateline.x_labels = date_list
     # ----- Release Frequency Graph
-        dateline = pygal.DateLine(show_y_labels=False, x_label_rotation=25)
+        dateline = pygal.DateLine(
+            show_y_labels=False, 
+            x_label_rotation=20, 
+            style=custom_style, 
+            height=200, 
+            show_x_guides=True)
         for libraries in range(len(library_releasedates)):
             for dates in range(len(library_releasedates[libraries])):
                 #https://stackoverflow.com/questions/466345/converting-string-into-datetime
                 library_releasedates[libraries][dates] = datetime.strptime(library_releasedates[libraries][dates], '%Y-%m-%d').date()
         for libraries in range(len(library_releasedates)):
-            dateline.add(library_names[libraries], library_releasedates[libraries])
+            dateline.add(library_names[libraries], library_releasedates[libraries], dots_size=15)
         visualizations[1].append(dateline.render_data_uri())
 
     # ----- Last Modified Date
+        firstDisplayedDate = getMonthDelta(min(library_lastModifiedDate), -1) # Get a month before min date
+        lastDisplayedDate = getMonthDelta(max(library_lastModifiedDate), 1) # Get a month after
+        print(library_lastModifiedDate)
+        print(str(firstDisplayedDate) + " " + str(lastDisplayedDate))
+        allMonths = monthsInBetween(firstDisplayedDate, lastDisplayedDate)
+        dateline = pygal.DateLine(
+            x_label_rotation=20, 
+            show_y_labels=False, 
+            style=custom_style, 
+            height=200, 
+            show_x_guides=True)
+        dateline.x_labels = allMonths
+        dateline.title = 'Repository Last Modified Date'
 
-
+        for index in range(len(library_lastModifiedDate)):
+            dateline.add(library_names[index], [(library_lastModifiedDate[index], 0.5)], dots_size=25)
+        
+        visualizations[2].append(dateline.render_data_uri())
         # Store components - visualizations[2] is Last Modified Date
 
     # ----- Backwards Compatibility
@@ -176,7 +209,7 @@ def visualization(request):
         # Store components - visualizations[3] is Backwards Compatibility
 
     # ----- Stack Overflow
-        bar_chart = pygal.Bar()
+        bar_chart = pygal.Bar(style=custom_style)
         bar_chart.title = 'Number of Questions Asked'
         #bar_chart.x_labels = library_names
         for libraries in range(len(library_QA_SO)):
@@ -207,3 +240,21 @@ def visualization(request):
 
     else:
         return redirect('/') # Go back to main screen
+
+def getMonthDelta(inputDate, delta):
+    first_day = inputDate.replace(day=1)
+    return first_day + relativedelta.relativedelta(months=+delta)
+
+def monthsInBetween(firstDate, lastDate):
+    # With help from https://dateutil.readthedocs.io/en/stable/relativedelta.html
+    sameMonth = False
+    iteratorDate = firstDate
+    dateList = []
+    while sameMonth == False:
+        if iteratorDate.month == lastDate.month and iteratorDate.year == lastDate.year:
+            sameMonth = True # I guess don't really need this
+            break
+        dateList.append(iteratorDate)
+        iteratorDate = iteratorDate + relativedelta.relativedelta(months=+1)
+    dateList.append(iteratorDate)
+    return dateList

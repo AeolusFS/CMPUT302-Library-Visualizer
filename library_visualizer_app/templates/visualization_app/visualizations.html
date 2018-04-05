@@ -16,10 +16,6 @@
     {% else %}
     <div id="{{visualization.0}}" class="mx-auto card-body" style="display: None; width: 500px;">
     {% endif %}
-        <div style="text-align: center;">
-            This is the visualization page for {{visualization.0}}.
-        </div>
-
         <figure>
             <embed type="image/svg+xml" src={{ visualization.1|safe }} />
         </figure>
