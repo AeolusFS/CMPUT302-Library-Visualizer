@@ -24,7 +24,7 @@
 
 <!-- Footer -->
 <footer class="w3-container w3-padding-16 w3-small" style="text-align:center; width:100%; bottom:0;">
-    <a>Made by: Wobbegongs - CMPUT 302 - Winter 2018</a>
+    <a data-toggle="tooltip" title="Made mostly by Storm Kaefer">Made by: Wobbegongs - CMPUT 302 - Winter 2018</a>
 </footer>
 
 </body>
@@ -39,5 +39,10 @@
     }
 </style>
 
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip(); 
+    });
+</script>
 
 </html>

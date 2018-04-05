@@ -159,13 +159,22 @@ def visualization(request):
             value_label_font_size = 25,
             title_font_size = 25,
             legend_font_size = 25,
-            tooltip_font_size = 25)
+            tooltip_font_size = 15)
+        log_style = Style(
+            label_font_size = 12,
+            major_label_font_size = 12,
+            value_font_size = 25,
+            value_label_font_size = 25,
+            title_font_size = 25,
+            legend_font_size = 25,
+            tooltip_font_size = 15)
 
 
     # ----- Popularity Count Graph
         bar_chart = pygal.Bar(
-            style=custom_style,
-            legend_at_bottom=True)
+            style=log_style,
+            legend_at_bottom=True,
+            logarithmic=True)
         bar_chart.title = 'Repository Popularity Count for Compared Libraries'
         #bar_chart.x_labels = library_names
         for libraries in range(len(library_popularity)):
@@ -225,10 +234,11 @@ def visualization(request):
         #     allDates += library_datelist
 
         bar_chart = pygal.DateLine(
-            style=custom_style,
+            style=log_style,
             x_label_rotation=25,
             legend_at_bottom=True,
-            show_x_guides=True)
+            show_x_guides=True,
+            logarithmic=True)
         bar_chart.title = 'Number of Breaking Changes'
         # DON'T NEED - bar_chart.x_labels = map(lambda d: d.strftime('%Y-%m-%d'), allDates)
         for libraryIndex in range(len(library_breakingChanges)):
@@ -243,7 +253,9 @@ def visualization(request):
         # Store components - visualizations[3] is Backwards Compatibility
 
     # ----- Stack Overflow
-        bar_chart = pygal.Bar(style=custom_style)
+        bar_chart = pygal.Bar(
+            style=log_style,
+            logarithmic=True)
         bar_chart.title = 'Number of Questions Asked'
         #bar_chart.x_labels = library_names
         for libraries in range(len(library_QA_SO)):
