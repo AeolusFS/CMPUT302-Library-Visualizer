@@ -129,9 +129,11 @@ def visualization(request):
 
         library_names = []
         library_popularity = []
+        library_QA_SO = []
         for library in compare_libraries:
             library_names.append(library['Name'])
             library_popularity.append(library['Popularity_Count'])
+            library_QA_SO.append(library['#_Questions_Asked_SO'])
 
 
     # ----- Popularity Count Graph
@@ -142,7 +144,11 @@ def visualization(request):
         visualizations[0].append(bar_chart.render_data_uri())
         # with help from http://pygal.org/en/stable/documentation/output.html
 
+
+
+
     # ----- Release Frequency Graph
+    
         
 
     # ----- Last Modified Date
@@ -150,15 +156,19 @@ def visualization(request):
 
         # Store components - visualizations[2] is Last Modified Date
 
-    # ----- Backwards Compatibility
+    # ----- Backwards Compatibility      
 
 
         # Store components - visualizations[3] is Backwards Compatibility
 
     # ----- Stack Overflow
-
-
+        bar_chart = pygal.Bar()
+        bar_chart.title = 'Number of Questions Asked'
+        bar_chart.x_labels = library_names
+        bar_chart.add('#_Questions_Asked', library_QA_SO)
+        
         # Store components - visualizations[4] is Stack Overflow
+        visualizations[4].append(bar_chart.render_data_uri())
 
     # ----- Security & Performance
 
