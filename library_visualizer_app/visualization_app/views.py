@@ -193,14 +193,16 @@ def visualization(request):
             show_y_labels=False, 
             x_label_rotation=25, 
             style=custom_style, 
-            height=400,
+            height=500,
             legend_at_bottom=True,
             show_x_guides=True)
         dateline.title = "Release Frequency Graph"
+        maxYAxis = 0.9
         for libraryIndex in range(len(library_releasedates)):
             releaseDatesTuple = []
             for releaseDatesIndex in range(len(library_releasedates[libraryIndex])):
-                releaseDatesTuple.append((library_releasedates[libraryIndex][releaseDatesIndex], 0.5))
+                releaseDatesTuple.append((library_releasedates[libraryIndex][releaseDatesIndex], maxYAxis))
+            maxYAxis -= 0.1
             dateline.add(library_names[libraryIndex], releaseDatesTuple, dots_size=15)
         visualizations[1].append(dateline.render_data_uri())
 
@@ -215,15 +217,15 @@ def visualization(request):
             show_y_labels=False,
             legend_at_bottom=True, 
             style=custom_style, 
-            height=400,
+            height=500,
             show_x_guides=True)
         # ALSO DON'T NEED - just pollutes the x - axis 
         # dateline.x_labels = allMonths
         dateline.title = 'Repository Last Modified Date'
-
+        maxYAxis = 0.9
         for index in range(len(library_lastModifiedDate)):
-            dateline.add(library_names[index], [(library_lastModifiedDate[index], 0.5)], dots_size=25)
-        
+            dateline.add(library_names[index], [(library_lastModifiedDate[index], maxYAxis)], dots_size=25)
+            maxYAxis -= 0.1
         visualizations[2].append(dateline.render_data_uri())
         # Store components - visualizations[2] is Last Modified Date
 
