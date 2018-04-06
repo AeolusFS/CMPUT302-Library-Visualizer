@@ -266,9 +266,8 @@ def visualization(request):
     # ----- Popularity Count Graph
         bar_chart = pygal.Bar(
             dynamic_print_values=True,
-            style=log_style,
-            legend_at_bottom=True,
-            logarithmic=True)
+            style=custom_style,
+            legend_at_bottom=True)
         bar_chart.title = 'Repository Popularity Count'
         #bar_chart.x_labels = library_names
         for libraries in range(len(library_popularity)):
@@ -354,8 +353,7 @@ def visualization(request):
     # ----- Stack Overflow
         bar_chart = pygal.Bar(
             dynamic_print_values=True,
-            style=log_style,
-            logarithmic=True)
+            style=custom_style)
         bar_chart.title = 'Number of Questions Asked on Stack Overflow'
         #bar_chart.x_labels = library_names
         for libraries in range(len(library_QA_SO)):
