@@ -139,8 +139,8 @@ def visualization(request):
         library_Secruity_Performance = []
         library_responsetime = []
         library_resolvedtime = []
-
-
+        libCount = len(compare_libraries)
+        
         for library in compare_libraries:
             library_names.append(library['Name'])
             library_popularity.append(library['Popularity_Count'])
@@ -269,7 +269,7 @@ def visualization(request):
             style=log_style,
             legend_at_bottom=True,
             logarithmic=True)
-        bar_chart.title = 'Repository Popularity Count for Compared Libraries'
+        bar_chart.title = 'Repository Popularity Count'
         #bar_chart.x_labels = library_names
         for libraries in range(len(library_popularity)):
             bar_chart.add(library_names[libraries], library_popularity[libraries])
@@ -289,8 +289,9 @@ def visualization(request):
             style=custom_style,
             height=500,
             legend_at_bottom=True,
-            show_x_guides=True)
-        dateline.title = "Release Frequency Graph"
+            show_x_guides=True,
+            range=(0.8-(libCount * 0.1), 1.0))
+        dateline.title = "Repository Release Frequency"
         maxYAxis = 0.9
         for libraryIndex in range(len(library_releasedates)):
             releaseDatesTuple = []
@@ -313,7 +314,8 @@ def visualization(request):
             legend_at_bottom=True,
             style=custom_style,
             height=500,
-            show_x_guides=True)
+            show_x_guides=True,
+            range=(0.8-(libCount * 0.1), 1.0))
         # ALSO DON'T NEED - just pollutes the x - axis
         # dateline.x_labels = allMonths
         dateline.title = 'Repository Last Modified Date'
@@ -336,7 +338,7 @@ def visualization(request):
             legend_at_bottom=True,
             show_x_guides=True,
             logarithmic=True)
-        bar_chart.title = 'Number of Breaking Changes'
+        bar_chart.title = 'Number of Breaking Changes in Each Release'
         # DON'T NEED - bar_chart.x_labels = map(lambda d: d.strftime('%Y-%m-%d'), allDates)
         for libraryIndex in range(len(library_breakingChanges)):
             release_breakingChange_tuples = []
@@ -354,7 +356,7 @@ def visualization(request):
             dynamic_print_values=True,
             style=log_style,
             logarithmic=True)
-        bar_chart.title = 'Number of Questions Asked'
+        bar_chart.title = 'Number of Questions Asked on Stack Overflow'
         #bar_chart.x_labels = library_names
         for libraries in range(len(library_QA_SO)):
             bar_chart.add(library_names[libraries], library_QA_SO[libraries])
@@ -370,14 +372,17 @@ def visualization(request):
             legend_at_bottom=True,
             style=custom_style,
             height=400,
-            show_x_guides=True)
+            show_x_guides=True,
+            range=(0.8-(libCount * 0.1), 1.0))
         dateline.title = 'Last Discussed on Stack Overflow'
 
         notDiscussed = []
+        maxYAxis = 0.9
         for index in range(len(library_lastDiscussedSO)):
-            dateline.add(library_names[index], [(library_lastDiscussedSO[index], 0.5)], dots_size=25)
+            dateline.add(library_names[index], [(library_lastDiscussedSO[index], maxYAxis)], dots_size=25)
             if library_lastDiscussedSO[index] == None:
                 notDiscussed.append(library_names[index])
+            maxYAxis -= 0.1
 
         visualizations[4].append(dateline.render_data_uri())
         # Store components - visualizations[4] is Stack Overflow
