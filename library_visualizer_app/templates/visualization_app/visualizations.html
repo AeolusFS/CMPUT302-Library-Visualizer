@@ -5,9 +5,12 @@
 <div class="card">
 
     <div class="card-header">
-        <h3 style="margin: 0;"><a href="{% url 'index' %}" style="display:inline-block;">
-        <img src="{% static 'open-iconic/svg/arrow-thick-left.svg' %}" alt='back arrow' style="height: 36px; margin: auto;"></a>
+        <h3 style="margin: 0; display:inline-block;">
+            <a href="{% url 'index' %}" style="display:inline-block;">
+                <img src="{% static 'img/back_arrow.png' %}" alt='back arrow' style="height: 36px; margin: auto;">
+            </a>
         LibHub</h3>
+        <img src="{% static 'img/logo.png' %}" alt='logo' style="float:right; height: 36px;">
     </div>
 
     {% for visualization in visualizations %}
