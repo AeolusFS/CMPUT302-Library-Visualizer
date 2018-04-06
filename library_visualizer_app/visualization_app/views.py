@@ -146,7 +146,9 @@ def visualization(request):
             library_popularity.append(library['Popularity_Count'])
             releaseDates = []
             for releaseDate in library['Release_Dates']:
-                releaseDates.append(datetime.strptime(releaseDate, "%Y-%m-%d"))
+                datefilter = datetime.today() - timedelta(days=365)
+                if datetime.strptime(releaseDate, "%Y-%m-%d") > datefilter:
+                    releaseDates.append(datetime.strptime(releaseDate, "%Y-%m-%d"))
             library_releasedates.append(releaseDates)
             library_lastModifiedDate.append(datetime.strptime(library['Last_Modification_Date'], "%Y-%m-%d"))
             library_breakingChanges.append(library['#_Breaking_Changes'])
@@ -276,9 +278,9 @@ def visualization(request):
 
 
     #ATTEMPT TO MAKE A FILTER
-        today = date.today()
+        #today = date.today()
         #https://stackoverflow.com/questions/993358/creating-a-range-of-dates-in-python
-        date_list = [today - timedelta(days=x) for x in range(0, 365)]
+        #date_list = [today - timedelta(days=x) for x in range(0, 365)]
         #dateline.x_labels = date_list
     # ----- Release Frequency Graph
         dateline = pygal.DateLine(
