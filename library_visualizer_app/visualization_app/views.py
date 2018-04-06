@@ -172,6 +172,7 @@ def visualization(request):
 
     # ----- Popularity Count Graph
         bar_chart = pygal.Bar(
+            dynamic_print_values=True,
             style=log_style,
             legend_at_bottom=True,
             logarithmic=True)
@@ -213,6 +214,7 @@ def visualization(request):
         lastDisplayedDate = getMonthDelta(max(library_lastModifiedDate), 1) # Get a month after
         allMonths = monthsInBetween(firstDisplayedDate, lastDisplayedDate)
         dateline = pygal.DateLine(
+            dynamic_print_values=True,
             x_label_rotation=20, 
             show_y_labels=False,
             legend_at_bottom=True, 
@@ -256,6 +258,7 @@ def visualization(request):
 
     # ----- Stack Overflow
         bar_chart = pygal.Bar(
+            dynamic_print_values=True,
             style=log_style,
             logarithmic=True)
         bar_chart.title = 'Number of Questions Asked'
@@ -268,6 +271,7 @@ def visualization(request):
 
         # Second chart
         dateline = pygal.DateLine(
+            dynamic_print_values=True,
             x_label_rotation=20, 
             show_y_labels=False,
             legend_at_bottom=True, 
