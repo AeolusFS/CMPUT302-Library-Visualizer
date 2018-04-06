@@ -391,9 +391,8 @@ def visualization(request):
         tran_data = [[],[],[],[]]
         bar_chart = pygal.StackedBar(
             dynamic_print_values=True,
-            style=log_style,
-            legend_at_bottom=True,
-            logarithmic=True)
+            style=custom_style,
+            legend_at_bottom=True)
         bar_chart.title = 'Security and Performance Percentage'
         bar_chart.x_labels = library_names
 
