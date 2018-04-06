@@ -137,7 +137,9 @@ def visualization(request):
         library_QA_SO = []
         library_lastDiscussedSO = []
         library_Secruity_Performance = []
-        
+        library_responsetime = []
+
+
         for library in compare_libraries:
             library_names.append(library['Name'])
             library_popularity.append(library['Popularity_Count'])
@@ -152,6 +154,7 @@ def visualization(request):
                 library_lastDiscussedSO.append(datetime.strptime(library['Last_Discussed_SO'], "%Y-%m-%d"))
             except: # No date
                 library_lastDiscussedSO.append(None)
+
             init_count = [0, 0, 0, 0] # Peformance - Sercuity - Both - Neither
             for issue_ID in library['Issue_Data']:
                 if library['Issue_Data'][issue_ID]['Performance_Issue'] == 'Yes':
@@ -165,8 +168,49 @@ def visualization(request):
                     else:
                         init_count[3] += 1
             library_Secruity_Performance.append(init_count)
-            
-                
+
+            timecategories = [0, 0, 0, 0, 0] #[<day, <week, <month, >month, still pending]
+            for issue_id in library['Issue_Data']:
+                skipflag = False
+                creationdate = datetime.strptime(library['Issue_Data'][issue_id]['Issue_Creation_Date'], "%Y-%m-%d %H:%M:%S")
+                try:
+                    closedate = datetime.strptime(library['Issue_Data'][issue_id]['Issue_Close_Date'], "%Y-%m-%d %H:%M:%S")
+                except: #date is none meaning issue is pending
+                    timecategories[4] += 1
+                    #print('pending')
+                    skipflag = True
+
+                if skipflag == False:
+                    #hours difference https://stackoverflow.com/questions/5612129/converting-date-into-hours
+                    resolvetime = (closedate - creationdate).total_seconds()/3600.0
+                    #print(resolvetime, creationdate, closedate, issue_id)
+
+                    if resolvetime < 24: # less than one day
+                        timecategories[0] += 1
+                    elif resolvetime < 168: #less than one week
+                        timecategories[1] += 1
+                    elif resolvetime < 720: #less than one month (30 days)
+                        timecategories[2] += 1
+                    elif resolvetime >= 720: #greater than or equal to a month (30 days)
+                        timecategories[3] += 1
+            #print(timecategories)
+            library_responsetime.append(timecategories)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     #--------- CUSTOM STYLE, USE THIS -----------------#
         custom_style = Style(
             label_font_size = 25,
@@ -207,9 +251,9 @@ def visualization(request):
         #dateline.x_labels = date_list
     # ----- Release Frequency Graph
         dateline = pygal.DateLine(
-            show_y_labels=False, 
-            x_label_rotation=25, 
-            style=custom_style, 
+            show_y_labels=False,
+            x_label_rotation=25,
+            style=custom_style,
             height=500,
             legend_at_bottom=True,
             show_x_guides=True)
@@ -231,13 +275,13 @@ def visualization(request):
         allMonths = monthsInBetween(firstDisplayedDate, lastDisplayedDate)
         dateline = pygal.DateLine(
             dynamic_print_values=True,
-            x_label_rotation=20, 
+            x_label_rotation=20,
             show_y_labels=False,
-            legend_at_bottom=True, 
-            style=custom_style, 
+            legend_at_bottom=True,
+            style=custom_style,
             height=500,
             show_x_guides=True)
-        # ALSO DON'T NEED - just pollutes the x - axis 
+        # ALSO DON'T NEED - just pollutes the x - axis
         # dateline.x_labels = allMonths
         dateline.title = 'Repository Last Modified Date'
         maxYAxis = 0.9
@@ -264,7 +308,7 @@ def visualization(request):
         for libraryIndex in range(len(library_breakingChanges)):
             release_breakingChange_tuples = []
             #print(str(len(library_releasedates[libraryIndex])) + " - " + str(len(library_breakingChanges[libraryIndex])))
-            for dateIndex in range(min(len(library_releasedates[libraryIndex]), len(library_breakingChanges[libraryIndex]))): 
+            for dateIndex in range(min(len(library_releasedates[libraryIndex]), len(library_breakingChanges[libraryIndex]))):
                 # So, breaking changes and released dates aren't exactly the same. That's why we look for min(), so things dont break
                 release_breakingChange_tuples.append((library_releasedates[libraryIndex][dateIndex], library_breakingChanges[libraryIndex][dateIndex]))
             bar_chart.add(library_names[libraryIndex], release_breakingChange_tuples, dots_size=5)
@@ -288,10 +332,10 @@ def visualization(request):
         # Second chart
         dateline = pygal.DateLine(
             dynamic_print_values=True,
-            x_label_rotation=20, 
+            x_label_rotation=20,
             show_y_labels=False,
-            legend_at_bottom=True, 
-            style=custom_style, 
+            legend_at_bottom=True,
+            style=custom_style,
             height=400,
             show_x_guides=True)
         dateline.title = 'Last Discussed on Stack Overflow'
@@ -304,7 +348,7 @@ def visualization(request):
 
         visualizations[4].append(dateline.render_data_uri())
         # Store components - visualizations[4] is Stack Overflow
-        
+
 
     # ----- Security & Performance
         labels = ['Performance','Security','Both','Neither']
@@ -315,18 +359,26 @@ def visualization(request):
             legend_at_bottom=True,
             logarithmic=True)
         bar_chart.title = 'Security and Performance Percentage'
-        bar_chart.x_labels = library_names 
-            
+        bar_chart.x_labels = library_names
+
         for libraries in range(len(library_Secruity_Performance)):
             for label_num in range(len(labels)):
                 tran_data[label_num].append(library_Secruity_Performance[libraries][label_num])
         for label in range(len(labels)):
-            bar_chart.add(labels[label], tran_data[label])      
+            bar_chart.add(labels[label], tran_data[label])
 
         # Store components - visualizations[5] is Security & Performance
         visualizations[5].append(bar_chart.render_data_uri())
 
     # ----- Issue Data Response Time
+        labels = ['<Day','<Week','<Month','>Month', 'Pending']
+        bar_chart = pygal.Bar(dynamic_print_values=True,
+            legend_at_bottom=True)
+        bar_chart.title = 'Issue Data Response Time'
+        bar_chart.x_labels = labels
+        for libraries in range(len(library_responsetime)):
+            bar_chart.add(library_names[libraries], library_responsetime[libraries])
+        visualizations[6].append(bar_chart.render_data_uri())
 
 
         # Store components - visualizations[6] is Issue Data Response Time

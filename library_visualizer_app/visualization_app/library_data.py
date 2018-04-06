@@ -36,7 +36,7 @@ import xlrd
 def remove_values_from_list(the_list, value):
     while value in the_list:
         the_list.remove(value)
-        
+
 def check_date_none(date_value):
     if date_value != 'None':
         try:
@@ -47,7 +47,7 @@ def check_date_none(date_value):
         return return_value
     else:
         return 'None'
-    
+
 
 # Read xlsx and initialize datemode
 #INSERT YOUR OWN PATH TO THE Metric_Data.xlsx HERE
@@ -191,5 +191,5 @@ for i in range(1,nrows):
     lib_info[row_value[1]]['Issue_Data'].update(lib_update)
 
 # For testing print
-for a in lib_info['hibernate orm']['Issue_Data']:
-    print(lib_info['hibernate orm']['Issue_Data'][a])
+#for a in lib_info['hibernate orm']['Issue_Data']:
+    #print(lib_info['hibernate orm']['Issue_Data'][a])
