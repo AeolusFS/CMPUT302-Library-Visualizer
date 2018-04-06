@@ -138,6 +138,7 @@ def visualization(request):
         library_lastDiscussedSO = []
         library_Secruity_Performance = []
         library_responsetime = []
+        library_resolvedtime = []
 
 
         for library in compare_libraries:
@@ -194,7 +195,37 @@ def visualization(request):
                     elif resolvetime >= 720: #greater than or equal to a month (30 days)
                         timecategories[3] += 1
             #print(timecategories)
-            library_responsetime.append(timecategories)
+            library_resolvedtime.append(timecategories)
+
+            timecategories1 = [0, 0, 0, 0, 0] #[<day, <week, <month, >month, no response]
+            for issue_id in library['Issue_Data']:
+                skipflag1 = False
+                creationdate = datetime.strptime(library['Issue_Data'][issue_id]['Issue_Creation_Date'], "%Y-%m-%d %H:%M:%S")
+                try:
+                    responsedate = datetime.strptime(library['Issue_Data'][issue_id]['Date_of_First_Comment'], "%Y-%m-%d %H:%M:%S")
+                except: #date is none meaning no comment
+                    timecategories1[4] += 1
+                    #print('pending')
+                    skipflag1 = True
+
+                if skipflag1 == False:
+                    #hours difference https://stackoverflow.com/questions/5612129/converting-date-into-hours
+                    resolvetime = (responsedate - creationdate).total_seconds()/3600.0
+                    #print(resolvetime, creationdate, closedate, issue_id)
+
+                    if resolvetime < 24: # less than one day
+                        timecategories1[0] += 1
+                    elif resolvetime < 168: #less than one week
+                        timecategories1[1] += 1
+                    elif resolvetime < 720: #less than one month (30 days)
+                        timecategories1[2] += 1
+                    elif resolvetime >= 720: #greater than or equal to a month (30 days)
+                        timecategories1[3] += 1
+            #print(timecategories)
+            library_responsetime.append(timecategories1)
+
+
+
 
 
 
@@ -371,9 +402,11 @@ def visualization(request):
         visualizations[5].append(bar_chart.render_data_uri())
 
     # ----- Issue Data Response Time
-        labels = ['<Day','<Week','<Month','>Month', 'Pending']
+
+        labels = ['<Day','<Week','<Month','>Month', 'No response']
         bar_chart = pygal.Bar(dynamic_print_values=True,
-            legend_at_bottom=True)
+            legend_at_bottom=True
+            )
         bar_chart.title = 'Issue Data Response Time'
         bar_chart.x_labels = labels
         for libraries in range(len(library_responsetime)):
@@ -381,9 +414,19 @@ def visualization(request):
         visualizations[6].append(bar_chart.render_data_uri())
 
 
+
         # Store components - visualizations[6] is Issue Data Response Time
 
     # ----- Issue Data Resolved Time
+        labels = ['<Day','<Week','<Month','>Month', 'Pending']
+        bar_chart = pygal.Bar(dynamic_print_values=True,
+            legend_at_bottom=True
+            )
+        bar_chart.title = 'Issue Data Resolved Time'
+        bar_chart.x_labels = labels
+        for libraries in range(len(library_resolvedtime)):
+            bar_chart.add(library_names[libraries], library_resolvedtime[libraries])
+        visualizations[7].append(bar_chart.render_data_uri())
 
 
         # Store components - visualizations[7] is Issue Data Resolved Time
