@@ -14,7 +14,7 @@ import os
 #        '#_Questions_Asked_SO': ,
 #        'Release_Dates':[],
 #        '#_Breaking_Changes':[],
-#        'Issue_data':{
+#        'Issue_Data':{
 #            1:{
 #               'Issue_Creation_Date':' ',
 #               'Issue_Close_Date':' ',
@@ -174,7 +174,6 @@ for i in range(1,nrows):
 # Read chart Issue Data
 table = data.sheet_by_name('Issue Data')
 nrows = table.nrows
-n=0
 
 for i in range(1,nrows):
     row_value = table.row_values(i)
@@ -192,4 +191,5 @@ for i in range(1,nrows):
     lib_info[row_value[1]]['Issue_Data'].update(lib_update)
 
 # For testing print
-# print (lib_info['hibernate orm']['Issue_Data']['HHH-12320'])
+for a in lib_info['hibernate orm']['Issue_Data']:
+    print(lib_info['hibernate orm']['Issue_Data'][a])

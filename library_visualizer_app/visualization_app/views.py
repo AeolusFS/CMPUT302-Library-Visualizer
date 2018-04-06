@@ -136,6 +136,8 @@ def visualization(request):
         library_breakingChanges = []
         library_QA_SO = []
         library_lastDiscussedSO = []
+        library_Secruity_Performance = []
+        
         for library in compare_libraries:
             library_names.append(library['Name'])
             library_popularity.append(library['Popularity_Count'])
@@ -150,6 +152,20 @@ def visualization(request):
                 library_lastDiscussedSO.append(datetime.strptime(library['Last_Discussed_SO'], "%Y-%m-%d"))
             except: # No date
                 library_lastDiscussedSO.append(None)
+            init_count = [0, 0, 0, 0] # Peformance - Sercuity - Both - Neither
+            for issue_ID in library['Issue_Data']:
+                if library['Issue_Data'][issue_ID]['Performance_Issue'] == 'Yes':
+                    if library['Issue_Data'][issue_ID]['Security_Issue'] == 'Yes':
+                        init_count[2] += 1
+                    else:
+                        init_count[0] += 1
+                else:
+                    if library['Issue_Data'][issue_ID]['Security_Issue'] == 'Yes':
+                        init_count[1] += 1
+                    else:
+                        init_count[3] += 1
+            library_Secruity_Performance.append(init_count)
+            
                 
     #--------- CUSTOM STYLE, USE THIS -----------------#
         custom_style = Style(
@@ -291,9 +307,24 @@ def visualization(request):
         
 
     # ----- Security & Performance
-
+        labels = ['Performance','Security','Both','Neither']
+        tran_data = [[],[],[],[]]
+        bar_chart = pygal.StackedBar(
+            dynamic_print_values=True,
+            style=log_style,
+            legend_at_bottom=True,
+            logarithmic=True)
+        bar_chart.title = 'Security and Performance Percentage'
+        bar_chart.x_labels = library_names 
+            
+        for libraries in range(len(library_Secruity_Performance)):
+            for label_num in range(len(labels)):
+                tran_data[label_num].append(library_Secruity_Performance[libraries][label_num])
+        for label in range(len(labels)):
+            bar_chart.add(labels[label], tran_data[label])      
 
         # Store components - visualizations[5] is Security & Performance
+        visualizations[5].append(bar_chart.render_data_uri())
 
     # ----- Issue Data Response Time
 
