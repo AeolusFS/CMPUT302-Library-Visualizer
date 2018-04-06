@@ -290,7 +290,7 @@ def visualization(request):
             height=500,
             legend_at_bottom=True,
             show_x_guides=True,
-            range=(0.8-(libCount * 0.1), 1.0))
+            range=(0.9-(libCount * 0.1), 1.0))
         dateline.title = "Repository Release Frequency"
         maxYAxis = 0.9
         for libraryIndex in range(len(library_releasedates)):
@@ -315,7 +315,7 @@ def visualization(request):
             style=custom_style,
             height=500,
             show_x_guides=True,
-            range=(0.8-(libCount * 0.1), 1.0))
+            range=(0.9-(libCount * 0.1), 1.0))
         # ALSO DON'T NEED - just pollutes the x - axis
         # dateline.x_labels = allMonths
         dateline.title = 'Repository Last Modified Date'
@@ -373,7 +373,7 @@ def visualization(request):
             style=custom_style,
             height=400,
             show_x_guides=True,
-            range=(0.8-(libCount * 0.1), 1.0))
+            range=(0.9-(libCount * 0.1), 1.0))
         dateline.title = 'Last Discussed on Stack Overflow'
 
         notDiscussed = []
